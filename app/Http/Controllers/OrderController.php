@@ -7,9 +7,11 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class OrderController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */

@@ -303,9 +303,21 @@
                  </a>
                </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
             <i class="fas fa-users"></i>
-            <span>Customers</span>
+            <span>Users</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
+            <i class="fas fa-shield-alt"></i>
+            <span>Roles</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}" href="{{ route('permissions.index') }}">
+            <i class="fas fa-key"></i>
+            <span>Permissions</span>
           </a>
         </li>
         <li class="nav-item">

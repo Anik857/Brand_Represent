@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -29,7 +31,7 @@ class ProductController extends Controller
 
         // Filter by category
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $query->where('category_id', $request->category);
         }
 
         // Filter by status
@@ -47,10 +49,10 @@ class ProductController extends Controller
         $sortDirection = $request->get('direction', 'desc');
         $query->orderBy($sortBy, $sortDirection);
 
-        $products = $query->paginate(12);
+        $products = $query->with('category')->paginate(12);
 
         // Get categories for filter dropdown
-        $categories = Product::distinct()->pluck('category')->filter()->sort()->values();
+        $categories = \App\Models\Category::active()->ordered()->get();
 
         return view('products.index', compact('products', 'categories'));
     }
@@ -116,6 +118,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->load('category');
         return view('products.show', compact('product'));
     }
 

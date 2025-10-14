@@ -89,7 +89,7 @@
                                 <tr>
                                     <td><strong>Category:</strong></td>
                                     <td>
-                                        <span class="badge bg-secondary">{{ $product->category }}</span>
+                                        <span class="badge bg-secondary">{{ $product->category->name ?? 'No Category' }}</span>
                                     </td>
                                 </tr>
                                 <tr>

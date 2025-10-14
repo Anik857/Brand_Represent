@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AdminUserSeeder extends Seeder
 {
@@ -14,24 +15,44 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create default admin user
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@brandrepresent.com',
-            'password' => Hash::make('password123'),
-        ]);
+        // Create superadmin user
+        $superadmin = User::firstOrCreate(
+            ['email' => 'superadmin@example.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password123'),
+            ]
+        );
 
-        // Create a test user
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test@brandrepresent.com',
-            'password' => Hash::make('password123'),
-        ]);
+        // Create admin user
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('password123'),
+            ]
+        );
 
-        $this->command->info('Admin users created successfully!');
-        $this->command->info('Admin Email: admin@brandrepresent.com');
+        // Create test user
+        $testUser = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        // Assign roles
+        $superadmin->assignRole('admin');
+        $admin->assignRole('admin');
+        $testUser->assignRole('employee');
+
+        $this->command->info('Users created successfully!');
+        $this->command->info('Super Admin Email: superadmin@example.com');
+        $this->command->info('Super Admin Password: password123');
+        $this->command->info('Admin Email: admin@example.com');
         $this->command->info('Admin Password: password123');
-        $this->command->info('Test Email: test@brandrepresent.com');
+        $this->command->info('Test Email: test@example.com');
         $this->command->info('Test Password: password123');
     }
 }

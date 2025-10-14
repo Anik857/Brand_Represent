@@ -37,8 +37,8 @@
                             <select class="form-select" id="category" name="category">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category }}" {{ request('category') == $category ? 'selected' : '' }}>
-                                        {{ $category }}
+                                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -140,7 +140,7 @@
                 <div class="card-body d-flex flex-column">
                     <div class="mb-2">
                         <span class="badge bg-{{ $product->status_badge }}">{{ ucfirst($product->status) }}</span>
-                        <span class="badge bg-secondary">{{ $product->category }}</span>
+                        <span class="badge bg-secondary">{{ $product->category->name ?? 'No Category' }}</span>
                     </div>
                     <h6 class="card-title">{{ $product->name }}</h6>
                     <p class="card-text text-muted small flex-grow-1">

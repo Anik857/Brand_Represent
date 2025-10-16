@@ -393,4 +393,31 @@ class ProductController extends Controller
             'message' => 'Invalid image URL'
         ], 400);
     }
+
+    /**
+     * Quick view JSON response for frontend modal
+     */
+    public function quickView(Product $product)
+    {
+        $product->load('category');
+
+        return response()->json([
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => (float) $product->price,
+            'compare_price' => $product->compare_price ? (float) $product->compare_price : null,
+            'formatted_price' => $product->formatted_price,
+            'formatted_compare_price' => $product->formatted_compare_price,
+            'discount_percentage' => $product->discount_percentage,
+            'status' => $product->status,
+            'featured' => (bool) $product->featured,
+            'quantity' => (int) $product->quantity,
+            'sku' => $product->sku,
+            'category' => $product->category->name ?? null,
+            'brand' => $product->brand,
+            'description' => $product->description,
+            'images' => $product->image_urls,
+            'main_image' => $product->main_image,
+        ]);
+    }
 }

@@ -50,6 +50,16 @@
                       <div>
                         <div class="fw-medium">{{ $item->product_name }}</div>
                         <small class="text-muted">{{ $item->product->category }}</small>
+                        @if($item->variant_color || $item->variant_size)
+                          <div class="small mt-1">
+                            @if($item->variant_color)
+                              <span class="badge bg-light text-dark border me-1">Color: {{ $item->variant_color }}</span>
+                            @endif
+                            @if($item->variant_size)
+                              <span class="badge bg-light text-dark border">Size: {{ $item->variant_size }}</span>
+                            @endif
+                          </div>
+                        @endif
                       </div>
                     </div>
                   </td>
@@ -150,6 +160,19 @@
             <p class="mb-0">{{ $order->payment_method }}</p>
           </div>
           @endif
+          @if($order->payment_transaction_id || $order->payment_number)
+          <div class="mb-0">
+            <label class="form-label">Payment Details</label>
+            <div class="small text-muted">
+              @if($order->payment_number)
+                <div><strong>Number:</strong> <span class="font-monospace">{{ $order->payment_number }}</span></div>
+              @endif
+              @if($order->payment_transaction_id)
+                <div><strong>TrxID:</strong> <span class="font-monospace">{{ $order->payment_transaction_id }}</span></div>
+              @endif
+            </div>
+          </div>
+          @endif
         </div>
       </div>
 
@@ -163,6 +186,12 @@
             <span>Subtotal:</span>
             <span>{{ $order->formatted_subtotal }}</span>
           </div>
+          @if($order->shipping_option)
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping Option:</span>
+            <span>{{ $order->shipping_option }}</span>
+          </div>
+          @endif
           @if($order->discount_amount > 0)
           <div class="d-flex justify-content-between mb-2">
             <span>Discount:</span>
@@ -186,6 +215,12 @@
             <strong>Total:</strong>
             <strong>{{ $order->formatted_total }}</strong>
           </div>
+          @if($order->payment_method)
+          <div class="mt-2 d-flex justify-content-between">
+            <span>Payment Method:</span>
+            <strong>{{ $order->payment_method }}</strong>
+          </div>
+          @endif
         </div>
       </div>
 

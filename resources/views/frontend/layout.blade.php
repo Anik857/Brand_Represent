@@ -5,11 +5,18 @@
 	<meta charset="utf-8">
 	<meta name="author" content="Themezhub">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>Kumo- Fashion eCommerce HTML Template</title>
+	<title>Brand Represent - Fashion eCommerce</title>
 
 	<!-- Custom CSS -->
 	<link href="{{ asset('frontend/assets/css/styles.css') }}" rel="stylesheet">
+	<style>
+		/* Center images inside quickview slider */
+		#quickview .quick_view_slide { text-align: center; }
+		#quickview .single_view_slide { display: flex; align-items: center; justify-content: center; min-height: 360px; }
+		#quickview .single_view_slide img { max-width: 100%; max-height: 360px; height: auto; width: auto; margin: 0 auto; }
+	</style>
 
 </head>
 
@@ -34,7 +41,7 @@
 				<nav id="navigation" class="navigation navigation-landscape">
 					<div class="nav-header">
 						<a class="nav-brand" href="#">
-							<img src="{{ asset('frontend/assets/img/logo.png') }}" class="logo" alt="">
+							<img src="{{ asset('frontend/assets/img/brand_logo.jpg') }}" class="logo" alt="">
 						</a>
 						<div class="nav-toggle"></div>
 						<div class="mobile_nav">
@@ -169,8 +176,8 @@
 				<!-- row -->
 				<div class="row align-items-center rows-products">
 					@forelse($trendyProducts as $product)
-						<div class="col-xl-3 col-lg-4 col-md-6 col-6">
-							<div class="product_grid card b-0">
+					<div class="col-xl-3 col-lg-4 col-md-6 col-6">
+						<div class="product_grid card b-0">
 								@php
 									$badge = null;
 									if (($product->quantity ?? 0) <= 0) {
@@ -185,35 +192,35 @@
 									<div class="badge {{ $badge[0] }} text-white position-absolute ft-regular ab-left text-upper">{{ $badge[1] }}</div>
 								@endif
 								<button class="btn btn_love position-absolute ab-right snackbar-wishlist"><i class="far fa-heart"></i></button>
-								<div class="card-body p-0">
-									<div class="shop_thumb position-relative">
-										<a class="card-img-top d-block overflow-hidden" href="#">
+							<div class="card-body p-0">
+								<div class="shop_thumb position-relative">
+										<a class="card-img-top d-block overflow-hidden" href="#" data-product-id="{{ $product->id }}" onclick="openQuickView(event, {{ $product->id }})">
 											<img class="card-img-top" src="{{ $product->main_image }}" alt="{{ $product->name }}">
 										</a>
 										<div class="product-hover-overlay bg-dark d-flex align-items-center justify-content-center">
-											<div class="edlio"><a href="#" class="text-white fs-sm ft-medium"><i class="fas fa-eye me-1"></i>Quick View</a></div>
-										</div>
+											<div class="edlio"><a href="#" class="text-white fs-sm ft-medium" onclick="openQuickView(event, {{ $product->id }})"><i class="fas fa-eye me-1"></i>Quick View</a></div>
 									</div>
 								</div>
+							</div>
 								<div class="card-footers b-0 pt-3 px-2 bg-white d-flex align-items-start justify-content-center">
-									<div class="text-left">
-										<div class="text-center">
+								<div class="text-left">
+									<div class="text-center">
 											<h5 class="fw-normal fs-md mb-0 lh-1 mb-1"><a href="#">{{ $product->name }}</a></h5>
 											<div class="elis_rty">
 												@if($product->compare_price && $product->compare_price > $product->price)
 													<span class="text-muted ft-medium line-through me-2">${{ number_format($product->compare_price, 2) }}</span>
 												@endif
 												<span class="fw-medium fs-md text-dark">${{ number_format($product->price, 2) }}</span>
-											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+					</div>
 					@empty
 						<div class="col-12">
 							<p class="text-center text-muted">No trendy products available.</p>
-						</div>
+									</div>
 					@endforelse
 				</div>
 				<!-- row -->
@@ -235,58 +242,32 @@
 				</div>
 
 				<div class="row">
-
+					@forelse($latestBlogs as $blog)
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 						<div class="_blog_wrap">
 							<div class="_blog_thumb mb-2">
-								<a style="cursor: none;" href="javascript:void(0);" class="d-block"><img
-													src="{{ asset('frontend/assets/img/bl-1.png') }}" class="img-fluid rounded" alt=""></a>
+								<a href="{{ route('blogs.show', $blog) }}" class="d-block">
+									<img src="{{ asset($blog->featured_image) }}" class="img-fluid rounded" alt="{{ $blog->title }}">
+								</a>
 							</div>
 							<div class="_blog_caption">
-								<span class="text-muted">26 Jan 2021</span>
-								<h5 class="bl_title lh-1"><a href="javascript:void(0);">Let's start bring sale on this
-										saummer vacation.</a></h5>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</p>
-								<a href="javascript:void(0);" class="text-dark fs-sm">Continue Reading..</a>
+								<span class="text-muted">{{ $blog->formatted_date }}</span>
+								<h5 class="bl_title lh-1">
+									<a href="{{ route('blogs.show', $blog) }}">{{ $blog->short_title }}</a>
+								</h5>
+								<p>{{ $blog->excerpt }}</p>
+								<a href="{{ route('blogs.show', $blog) }}" class="text-dark fs-sm">Continue Reading..</a>
 							</div>
 						</div>
 					</div>
-
-					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-						<div class="_blog_wrap">
-							<div class="_blog_thumb mb-2">
-								<a style="cursor: none;" href="javascript:void(0);" class="d-block"><img
-													src="{{ asset('frontend/assets/img/bl-2.png') }}" class="img-fluid rounded" alt=""></a>
-							</div>
-							<div class="_blog_caption">
-								<span class="text-muted">17 July 2021</span>
-								<h5 class="bl_title lh-1"><a href="javascript:void(0);">Let's start bring sale on this
-										saummer vacation.</a></h5>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</p>
-								<a href="javascript:void(0);" class="text-dark fs-sm">Continue Reading..</a>
-							</div>
+					@empty
+					<div class="col-12">
+						<div class="text-center py-5">
+							<h4>No blog posts available</h4>
+							<p class="text-muted">Check back later for updates!</p>
 						</div>
 					</div>
-
-					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-						<div class="_blog_wrap">
-							<div class="_blog_thumb mb-2">
-								<a style="cursor: none;" href="javascript:void(0);" class="d-block"><img
-													src="{{ asset('frontend/assets/img/bl-3.png') }}" class="img-fluid rounded" alt=""></a>
-							</div>
-							<div class="_blog_caption">
-								<span class="text-muted">10 Aug 2021</span>
-								<h5 class="bl_title lh-1"><a href="javascript:void(0);">Let's start bring sale on this
-										saummer vacation.</a></h5>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-									incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</p>
-								<a href="javascript:void(0);" class="text-dark fs-sm">Continue Reading..</a>
-							</div>
-						</div>
-					</div>
-
+					@endforelse
 				</div>
 
 			</div>
@@ -588,16 +569,7 @@
 						<div class="quick_view_wrap">
 
 							<div class="quick_view_thmb">
-								<div class="quick_view_slide">
-									<div class="single_view_slide"><img src="{{ asset('frontend/assets/img/product/1.jpg') }}" class="img-fluid"
-											alt=""></div>
-									<div class="single_view_slide"><img src="{{ asset('frontend/assets/img/product/2.jpg') }}" class="img-fluid"
-											alt=""></div>
-									<div class="single_view_slide"><img src="{{ asset('frontend/assets/img/product/3.jpg') }}" class="img-fluid"
-											alt=""></div>
-									<div class="single_view_slide"><img src="{{ asset('frontend/assets/img/product/4.jpg') }}" class="img-fluid"
-											alt=""></div>
-								</div>
+								<div class="quick_view_slide"></div>
 							</div>
 
 							<div class="quick_view_capt">
@@ -715,8 +687,8 @@
 											</div>
 											<div class="col-12 col-md-12 col-lg-6">
 												<!-- Submit -->
-												<button type="submit"
-													class="btn btn-block custom-height bg-dark mb-2 w-100">
+												<button type="button"
+													class="btn btn-block custom-height bg-dark mb-2 w-100" onclick="addToCartFromModal()">
 													<i class="lni lni-shopping-basket me-2"></i>Add to Cart
 												</button>
 											</div>
@@ -908,7 +880,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img
+										<a href="javascript:void(0);" class="d-block"><img
 														src="{{ asset('frontend/assets/img/television.png') }}" class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
@@ -922,7 +894,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img
+										<a href="javascript:void(0);" class="d-block"><img
 														src="{{ asset('frontend/assets/img/accessories.png') }}" class="img-fluid" width="40"
 												alt=""></a>
 									</div>
@@ -1006,7 +978,7 @@
 
 					<div class="d-flex align-items-center justify-content-between br-top br-bottom px-3 py-3">
 						<h6 class="mb-0">Subtotal</h6>
-						<h3 class="mb-0 ft-medium">$417</h3>
+						<h3 class="mb-0 ft-medium" id="wishlistSubtotal">$0.00</h3>
 					</div>
 
 					<div class="cart_action px-3 py-3">
@@ -1031,71 +1003,17 @@
 				</div>
 				<div class="right-ch-sideBar">
 
-					<div class="cart_select_items py-2">
-						<!-- Single Item -->
-						<div class="d-flex align-items-center justify-content-between br-bottom px-3 py-3">
-							<div class="cart_single d-flex align-items-center">
-								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/4.jpg') }}" width="60" class="img-fluid"
-											alt=""></a>
-								</div>
-								<div class="cart_single_caption ps-2">
-									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Women Striped Shirt Dress</h4>
-									<p class="mb-2"><span class="text-dark ft-medium small">36</span>, <span
-											class="text-dark small">Red</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$129</h4>
-								</div>
-							</div>
-							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
-							</div>
-						</div>
-
-						<!-- Single Item -->
-						<div class="d-flex align-items-center justify-content-between br-bottom px-3 py-3">
-							<div class="cart_single d-flex align-items-center">
-								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/7.jpg') }}" width="60" class="img-fluid"
-											alt=""></a>
-								</div>
-								<div class="cart_single_caption ps-2">
-									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Girls Floral Print Jumpsuit</h4>
-									<p class="mb-2"><span class="text-dark ft-medium small">36</span>, <span
-											class="text-dark small">Red</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$129</h4>
-								</div>
-							</div>
-							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
-							</div>
-						</div>
-
-						<!-- Single Item -->
-						<div class="d-flex align-items-center justify-content-between px-3 py-3">
-							<div class="cart_single d-flex align-items-center">
-								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/8.jpg') }}" width="60" class="img-fluid"
-											alt=""></a>
-								</div>
-								<div class="cart_single_caption ps-2">
-									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Girls Solid A-Line Dress</h4>
-									<p class="mb-2"><span class="text-dark ft-medium small">30</span>, <span
-											class="text-dark small">Blue</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$100</h4>
-								</div>
-							</div>
-							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
-							</div>
-						</div>
-
+					<div class="cart_select_items py-2" id="cartItems">
 					</div>
 
 					<div class="d-flex align-items-center justify-content-between br-top br-bottom px-3 py-3">
 						<h6 class="mb-0">Subtotal</h6>
-						<h3 class="mb-0 ft-medium">$1023</h3>
+						<h3 class="mb-0 ft-medium" id="cartSubtotal">$0.00</h3>
 					</div>
 
 					<div class="cart_action px-3 py-3">
 						<div class="form-group mb-3">
-							<button type="button" class="btn d-block full-width btn-dark">Checkout Now</button>
+							<a href="{{ route('checkout.show') }}" class="btn d-block full-width btn-dark">Checkout Now</a>
 						</div>
 						<div class="form-group">
 							<button type="button" class="btn d-block full-width btn-dark-light">Edit or View</button>
@@ -1133,6 +1051,105 @@
 	<!-- ============================================================== -->
 
 	<script>
+		async function openQuickView(e, productId) {
+			e && e.preventDefault();
+			try {
+				const resp = await fetch(`/products/${productId}/quickview`);
+				if (!resp.ok) throw new Error('Failed to load product');
+				const p = await resp.json();
+				populateQuickView(p);
+				new bootstrap.Modal(document.getElementById('quickview')).show();
+			} catch (err) {
+				console.error(err);
+			}
+		}
+
+		function populateQuickView(p) {
+			// Images
+			const slides = (p.images && p.images.length ? p.images : [p.main_image])
+				.map(url => `<div class="single_view_slide"><img src="${url}" class="img-fluid" alt=""></div>`) 
+				.join('');
+			const slideWrap = document.querySelector('#quickview .quick_view_slide');
+			if (slideWrap) slideWrap.innerHTML = slides;
+
+			// Initialize/refresh slick slider for animation
+			try {
+				const $slider = window.jQuery ? window.jQuery('#quickview .quick_view_slide') : null;
+				if ($slider && $slider.length) {
+					if ($slider.hasClass('slick-initialized')) {
+						$slider.slick('unslick');
+					}
+					$slider.slick({
+						dots: true,
+						arrows: true,
+						infinite: true,
+						speed: 400,
+						autoplay: true,
+						autoplaySpeed: 3000,
+						slidesToShow: 1,
+						slidesToScroll: 1,
+						adaptiveHeight: true,
+					});
+				}
+			} catch (e) {
+				console.warn('Slick init failed', e);
+			}
+
+			// Title & pricing
+			const titleEl = document.querySelector('#quickview .prt_02 h2');
+			if (titleEl) titleEl.textContent = p.name;
+			// store id on modal element for add-to-cart
+			document.getElementById('quickview').dataset.productId = p.id;
+			const priceWrap = document.querySelector('#quickview .prt_02 .elis_rty');
+			if (priceWrap) {
+				let html = '';
+				if (p.compare_price && p.compare_price > p.price) {
+					html += `<span class="ft-medium text-muted line-through fs-md me-2">$${Number(p.compare_price).toFixed(2)}</span>`;
+				}
+				html += `<span class="ft-bold theme-cl fs-lg me-2">$${Number(p.price).toFixed(2)}</span>`;
+				priceWrap.innerHTML = html;
+			}
+
+			// Description
+			const descEl = document.querySelector('#quickview .prt_03 p');
+			if (descEl) descEl.textContent = p.description || '';
+		}
+
+		async function addToCartFromModal() {
+ 			const modal = document.getElementById('quickview');
+ 			const productId = modal.dataset.productId;
+ 			const qtySelect = modal.querySelector('.prt_05 select');
+ 			const quantity = qtySelect ? parseInt(qtySelect.value || '1') : 1;
+			// Collect optional color/size from radio inputs if present
+			const colorInput = modal.querySelector('input[name^="color"]:checked');
+			const sizeInput = modal.querySelector('input[name="size"]:checked');
+			const color = colorInput ? colorInput.id : null;
+			const size = sizeInput ? sizeInput.id : null;
+ 			try {
+ 				const resp = await fetch(`{{ route('cart.add') }}`, {
+ 					method: 'POST',
+ 					headers: {
+ 						'Content-Type': 'application/json',
+ 						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+ 					},
+ 					body: JSON.stringify({ product_id: productId, quantity, color, size })
+ 				});
+ 				if (!resp.ok) throw new Error('Add to cart failed');
+ 				const data = await resp.json();
+ 				updateCartCounter(data.count);
+ 				if (window.Snackbar) {
+ 					Snackbar.show({text: 'Added to cart', pos: 'bottom-center'});
+ 				}
+ 			} catch (e) {
+ 				console.error(e);
+ 			}
+ 		}
+
+		function updateCartCounter(count) {
+			// header counters
+			const counters = document.querySelectorAll('.lni-shopping-basket ~ .dn-counter, .lni-shopping-basket + span.dn-counter, .lni.lni-shopping-basket ~ span.dn-counter');
+			counters.forEach(el => { el.textContent = count; el.classList.add('theme-bg'); });
+		}
 		function openWishlist() {
 			document.getElementById("Wishlist").style.display = "block";
 		}
@@ -1142,8 +1159,42 @@
 	</script>
 
 	<script>
-		function openCart() {
+		async function openCart() {
 			document.getElementById("Cart").style.display = "block";
+			try {
+				const resp = await fetch(`{{ route('cart.items') }}`);
+				if (!resp.ok) throw new Error('Failed to load cart');
+				const { items, subtotal } = await resp.json();
+				renderCartItems(items);
+				const subtotalEl = document.getElementById('cartSubtotal');
+				if (subtotalEl) subtotalEl.textContent = `$${Number(subtotal).toFixed(2)}`;
+			} catch (e) {
+				console.error(e);
+			}
+		}
+
+		function renderCartItems(items) {
+			const wrap = document.getElementById('cartItems');
+			if (!wrap) return;
+			if (!items || !items.length) {
+				wrap.innerHTML = `<div class="px-3 py-4 text-center text-muted">Your cart is empty</div>`;
+				return;
+			}
+			wrap.innerHTML = items.map(it => `
+				<div class="d-flex align-items-center justify-content-between br-bottom px-3 py-3">
+					<div class="cart_single d-flex align-items-center">
+						<div class="cart_selected_single_thumb">
+							<a href="#"><img src="${it.image}" width="60" class="img-fluid" alt=""></a>
+						</div>
+						<div class="cart_single_caption ps-2">
+							<h4 class="product_title fs-sm ft-medium mb-0 lh-1">${it.name}</h4>
+							<p class="mb-2"><span class="text-dark small">Qty: ${it.quantity}</span></p>
+							<h4 class="fs-md ft-medium mb-0 lh-1">$${(it.price * it.quantity).toFixed(2)}</h4>
+						</div>
+					</div>
+					<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button></div>
+				</div>
+			`).join('');
 		}
 		function closeCart() {
 			document.getElementById("Cart").style.display = "none";

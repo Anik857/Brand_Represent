@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
@@ -10,6 +12,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\NewUpdatesController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
@@ -20,8 +25,26 @@ Route::get('/', function () {
         ->latest()
         ->take(8)
         ->get();
-    return view('welcome', compact('trendyProducts'));
+    
+    $latestBlogs = \App\Models\Blog::published()
+        ->latest()
+        ->limit(3)
+        ->get();
+    
+    return view('welcome', compact('trendyProducts', 'latestBlogs'));
 });
+
+// Public quickview endpoint for frontend modal
+Route::get('/products/{product}/quickview', [ProductController::class, 'quickView'])->name('products.quickview');
+
+// Cart endpoints (session-based)
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::get('/cart/items', [CartController::class, 'items'])->name('cart.items');
+
+// Checkout
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'place'])->name('checkout.place');
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -115,8 +138,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/setting/{setting}', [SettingsController::class, 'show'])->name('settings.show')->middleware('permission:manage users');
     Route::delete('/settings/setting/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy')->middleware('permission:manage users');
     
+    // Blog management routes - with permission middleware
+    Route::resource('blogs', AdminBlogController::class)->names([
+        'index' => 'admin.blogs.index',
+        'create' => 'admin.blogs.create',
+        'store' => 'admin.blogs.store',
+        'show' => 'admin.blogs.show',
+        'edit' => 'admin.blogs.edit',
+        'update' => 'admin.blogs.update',
+        'destroy' => 'admin.blogs.destroy',
+    ])->middleware('permission:manage users');
+
+    // New Updates management routes - with permission middleware
+    Route::resource('new-updates', NewUpdatesController::class)->names([
+        'index' => 'admin.new-updates.index',
+        'create' => 'admin.new-updates.create',
+        'store' => 'admin.new-updates.store',
+        'show' => 'admin.new-updates.show',
+        'edit' => 'admin.new-updates.edit',
+        'update' => 'admin.new-updates.update',
+        'destroy' => 'admin.new-updates.destroy',
+    ])->middleware('permission:manage users');
+
     // This must be LAST to avoid conflicts - redirect /settings/{group} to /settings/{group}/edit
     Route::get('/settings/{group}', function($group) {
         return redirect()->route('settings.edit', $group);
     })->name('settings.group')->middleware('permission:manage users');
 });
+
+// Blog routes (public)
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');

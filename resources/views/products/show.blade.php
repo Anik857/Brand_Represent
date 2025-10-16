@@ -29,16 +29,16 @@
         <div class="col-lg-4 mb-4">
             <div class="card">
                 <div class="card-body">
-                    @if($product->images && count($product->images) > 0)
+                    @if($product->image_urls && count($product->image_urls) > 0)
                         <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                @foreach($product->images as $index => $image)
+                                @foreach($product->image_urls as $index => $image)
                                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                         <img src="{{ $image }}" class="d-block w-100" alt="Product Image {{ $index + 1 }}" style="height: 300px; object-fit: cover;">
                                     </div>
                                 @endforeach
                             </div>
-                            @if(count($product->images) > 1)
+                            @if(count($product->image_urls) > 1)
                                 <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon"></span>
                                 </button>
@@ -49,9 +49,9 @@
                         </div>
                         
                         <!-- Thumbnail Navigation -->
-                        @if(count($product->images) > 1)
+                        @if(count($product->image_urls) > 1)
                             <div class="row mt-3">
-                                @foreach($product->images as $index => $image)
+                                @foreach($product->image_urls as $index => $image)
                                     <div class="col-4">
                                         <img src="{{ $image }}" class="img-fluid rounded cursor-pointer" 
                                              alt="Thumbnail {{ $index + 1 }}" 

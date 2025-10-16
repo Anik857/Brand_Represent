@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Product;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
@@ -8,12 +9,18 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return view('welcome');
+    $trendyProducts = Product::active()
+        ->orderByDesc('featured')
+        ->latest()
+        ->take(8)
+        ->get();
+    return view('welcome', compact('trendyProducts'));
 });
 
 // Authentication Routes
@@ -98,4 +105,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit')->middleware('permission:manage users');
     Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update')->middleware('permission:manage users');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy')->middleware('permission:manage users');
+
+    // Settings management routes - with permission middleware
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index')->middleware('permission:manage users');
+    Route::get('/settings/create', [SettingsController::class, 'create'])->name('settings.create')->middleware('permission:manage users');
+    Route::post('/settings', [SettingsController::class, 'store'])->name('settings.store')->middleware('permission:manage users');
+    Route::get('/settings/{group}/edit', [SettingsController::class, 'edit'])->name('settings.edit')->middleware('permission:manage users');
+    Route::put('/settings/{group}', [SettingsController::class, 'update'])->name('settings.update')->middleware('permission:manage users');
+    Route::get('/settings/setting/{setting}', [SettingsController::class, 'show'])->name('settings.show')->middleware('permission:manage users');
+    Route::delete('/settings/setting/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy')->middleware('permission:manage users');
+    
+    // This must be LAST to avoid conflicts - redirect /settings/{group} to /settings/{group}/edit
+    Route::get('/settings/{group}', function($group) {
+        return redirect()->route('settings.edit', $group);
+    })->name('settings.group')->middleware('permission:manage users');
 });

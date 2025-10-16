@@ -50,10 +50,26 @@
       top: 0;
       z-index: 1000;
       transition: all 0.3s ease;
+      overflow-y: auto;
     }
 
     .sidebar.collapsed {
       width: 80px;
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+
+    .sidebar-overlay.show {
+      display: block;
     }
 
     .sidebar-brand {
@@ -178,15 +194,177 @@
     }
 
     .avatar-circle {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 0.875rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .avatar-circle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .avatar-circle::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px var(--light-bg);
+    }
+
+    .profile-button {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-button:hover {
+      background: var(--light-bg);
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .profile-button:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .profile-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+    }
+
+    .profile-role {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .profile-chevron {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-button[aria-expanded="true"] .profile-chevron {
+      transform: rotate(180deg);
+    }
+
+    .profile-dropdown {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      padding: 0.5rem 0;
+      margin-top: 0.5rem;
+      min-width: 200px;
+      animation: dropdownFadeIn 0.2s ease-out;
+    }
+
+    @keyframes dropdownFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .profile-dropdown .dropdown-item {
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      margin: 0.25rem 0.5rem;
+    }
+
+    .profile-dropdown .dropdown-item:hover {
+      background: var(--light-bg);
+      color: var(--primary-color);
+      transform: translateX(4px);
+    }
+
+    .profile-dropdown .dropdown-item i {
+      width: 16px;
+      text-align: center;
+    }
+
+    .profile-dropdown .dropdown-divider {
+      margin: 0.5rem 0;
+      border-color: var(--border-color);
+    }
+
+    .profile-header {
+      padding: 1rem;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: white;
+      border-radius: 12px 12px 0 0;
+      margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+    }
+
+    .profile-header-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-header-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .profile-header-email {
+      font-size: 0.8rem;
+      opacity: 0.9;
     }
 
     .status-badge {
@@ -253,9 +431,19 @@
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
+        width: 280px;
       }
 
       .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .sidebar.collapsed {
+        width: 280px;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.collapsed.show {
         transform: translateX(0);
       }
 
@@ -263,14 +451,107 @@
         margin-left: 0;
       }
 
+      .main-content.expanded {
+        margin-left: 0;
+      }
+
       .content-wrapper {
         padding: 0 1rem 1rem;
+      }
+
+      .top-navbar {
+        padding: 1rem;
+      }
+
+      .search-box input {
+        width: 200px !important;
+      }
+
+    .nav-link span {
+      display: block;
+    }
+
+    .sidebar-brand h4 {
+      font-size: 1.1rem;
+    }
+
+    .nav-link {
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .nav-link i {
+      width: 24px;
+      margin-right: 1rem;
+    }
+
+    @media (max-width: 576px) {
+      .search-box {
+        display: none;
+      }
+
+      .content-wrapper {
+        padding: 0 0.5rem 1rem;
+      }
+
+      .top-navbar {
+        padding: 0.75rem;
+      }
+
+      .stats-card {
+        padding: 1rem;
+      }
+
+      .table-responsive {
+        font-size: 0.875rem;
+      }
+
+      .profile-button {
+        padding: 0.4rem 0.8rem;
+      }
+
+      .profile-name {
+        max-width: 80px;
+        font-size: 0.85rem;
+      }
+
+      .profile-role {
+        font-size: 0.7rem;
+      }
+
+      .profile-dropdown {
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .profile-button {
+        padding: 0.3rem 0.6rem;
+        gap: 0.5rem;
+      }
+
+      .profile-info {
+        display: none;
+      }
+
+      .profile-button {
+        min-width: 40px;
+        justify-content: center;
+      }
+
+      .avatar-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-brand">
@@ -321,7 +602,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}" href="{{ route('settings.index') }}">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </a>
@@ -366,17 +647,38 @@
 
           <!-- User Profile -->
           <div class="dropdown">
-            <button class="btn btn-link d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-              <div class="avatar-circle me-2">
-                <i class="fas fa-user"></i>
+            <button class="profile-button" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="avatar-circle">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
               </div>
-              <span>{{ Auth::user()->name }}</span>
-              <i class="fas fa-chevron-down ms-2"></i>
+              <div class="profile-info">
+                <div class="profile-name">{{ Auth::user()->name }}</div>
+                <div class="profile-role">
+                  @if(Auth::user()->hasRole('admin'))
+                    Administrator
+                  @elseif(Auth::user()->hasRole('manager'))
+                    Manager
+                  @elseif(Auth::user()->hasRole('employee'))
+                    Employee
+                  @else
+                    Customer
+                  @endif
+                </div>
+              </div>
+              <i class="fas fa-chevron-down profile-chevron"></i>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="{{ route('profile.show') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
-              <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-edit me-2"></i>Edit Profile</a></li>
-              <li><a class="dropdown-item" href="{{ route('profile.password') }}"><i class="fas fa-key me-2"></i>Change Password</a></li>
+            <ul class="dropdown-menu dropdown-menu-end profile-dropdown">
+              <li class="profile-header">
+                <div class="profile-header-avatar">
+                  {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                </div>
+                <div class="profile-header-name">{{ Auth::user()->name }}</div>
+                <div class="profile-header-email">{{ Auth::user()->email }}</div>
+              </li>
+              <li><a class="dropdown-item" href="{{ route('profile.show') }}"><i class="fas fa-user"></i>View Profile</a></li>
+              <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-edit"></i>Edit Profile</a></li>
+              <li><a class="dropdown-item" href="{{ route('profile.password') }}"><i class="fas fa-key"></i>Change Password</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i>Settings</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -384,7 +686,7 @@
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
                   @csrf
                   <button type="submit" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    <i class="fas fa-sign-out-alt"></i>Logout
                   </button>
                 </form>
               </li>
@@ -406,21 +708,75 @@
   <!-- Custom JS -->
   <script>
     // Sidebar toggle functionality
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-      sidebar.classList.toggle('collapsed');
-      mainContent.classList.toggle('expanded');
+    function toggleSidebar() {
+      if (window.innerWidth <= 768) {
+        // Mobile behavior
+        sidebar.classList.toggle('show');
+        sidebarOverlay.classList.toggle('show');
+        document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+      } else {
+        // Desktop behavior
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+      }
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('show');
+      sidebarOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    // Toggle sidebar on button click
+    sidebarToggle.addEventListener('click', toggleSidebar);
+
+    // Close sidebar when clicking overlay
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+      if (window.innerWidth <= 768 && 
+          !sidebar.contains(event.target) && 
+          !sidebarToggle.contains(event.target) &&
+          sidebar.classList.contains('show')) {
+        closeSidebar();
+      }
     });
 
-    // Mobile sidebar toggle
-    if (window.innerWidth <= 768) {
-      document.getElementById('sidebarToggle').addEventListener('click', function() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('show');
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+        // Desktop: remove mobile classes
+        sidebar.classList.remove('show');
+        sidebarOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+      } else {
+        // Mobile: remove desktop classes
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('expanded');
+      }
+    });
+
+    // Close sidebar on navigation link click (mobile)
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+          closeSidebar();
+        }
       });
-    }
+    });
+
+    // Handle escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && sidebar.classList.contains('show')) {
+        closeSidebar();
+      }
+    });
   </script>
 
   @yield('scripts')

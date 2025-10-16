@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -103,6 +104,13 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
+        // Ensure legacy 'category' string column is populated from selected category
+        if (isset($data['category_id'])) {
+            $category = Category::find($data['category_id']);
+            if ($category) {
+                $data['category'] = $category->name;
+            }
+        }
 
         // Handle image uploads
         $data['images'] = $this->handleImageUploads($request);
@@ -168,6 +176,13 @@ class ProductController extends Controller
         ]);
 
         $data = $request->all();
+        // Ensure legacy 'category' string column is populated from selected category
+        if (isset($data['category_id'])) {
+            $category = Category::find($data['category_id']);
+            if ($category) {
+                $data['category'] = $category->name;
+            }
+        }
 
         // Handle removed images
         $currentImages = $product->images ?? [];

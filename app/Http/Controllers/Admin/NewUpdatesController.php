@@ -10,9 +10,47 @@ use Illuminate\Support\Facades\Storage;
 
 class NewUpdatesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::latest()->paginate(10);
+        $query = Blog::query();
+
+        // Search by title or author
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('author', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by published status
+        if ($request->filled('status')) {
+            $query->where('is_published', (bool) ((int) $request->get('status')));
+        }
+
+        // Filter by author
+        if ($request->filled('author')) {
+            $query->where('author', $request->get('author'));
+        }
+
+        // Sorting
+        switch ($request->get('sort')) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'title':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'views':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'latest':
+            default:
+                $query->orderBy('created_at', 'desc');
+        }
+
+        $blogs = $query->paginate(10)->withQueryString();
+
         return view('admin.new-updates.index', compact('blogs'));
     }
 

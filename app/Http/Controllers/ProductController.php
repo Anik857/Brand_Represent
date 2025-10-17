@@ -101,9 +101,18 @@ class ProductController extends Controller
             'dimensions' => 'nullable|string',
             'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
+            'available_colors' => 'nullable|string',
+            'available_sizes' => 'nullable|string',
         ]);
 
         $data = $request->all();
+        // Normalize variants from comma-separated to array
+        if (!empty($data['available_colors'])) {
+            $data['available_colors'] = array_values(array_filter(array_map('trim', explode(',', $data['available_colors']))));
+        }
+        if (!empty($data['available_sizes'])) {
+            $data['available_sizes'] = array_values(array_filter(array_map('trim', explode(',', $data['available_sizes']))));
+        }
         // Ensure legacy 'category' string column is populated from selected category
         if (isset($data['category_id'])) {
             $category = Category::find($data['category_id']);
@@ -173,9 +182,18 @@ class ProductController extends Controller
             'dimensions' => 'nullable|string',
             'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
+            'available_colors' => 'nullable|string',
+            'available_sizes' => 'nullable|string',
         ]);
 
         $data = $request->all();
+        // Normalize variants from comma-separated to array
+        if (!empty($data['available_colors'])) {
+            $data['available_colors'] = array_values(array_filter(array_map('trim', explode(',', $data['available_colors']))));
+        }
+        if (!empty($data['available_sizes'])) {
+            $data['available_sizes'] = array_values(array_filter(array_map('trim', explode(',', $data['available_sizes']))));
+        }
         // Ensure legacy 'category' string column is populated from selected category
         if (isset($data['category_id'])) {
             $category = Category::find($data['category_id']);
@@ -418,6 +436,8 @@ class ProductController extends Controller
             'description' => $product->description,
             'images' => $product->image_urls,
             'main_image' => $product->main_image,
+            'available_colors' => $product->available_colors ?? [],
+            'available_sizes' => $product->available_sizes ?? [],
         ]);
     }
 }

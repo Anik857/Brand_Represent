@@ -21,21 +21,9 @@
 </head>
 
 <body>
-
-	<!-- ============================================================== -->
-	<!-- Preloader - style you can find in spinners.css -->
-	<!-- ============================================================== -->
 	<div class="preloader"></div>
-
-	<!-- ============================================================== -->
-	<!-- Main wrapper - style you can find in pages.scss -->
 	<!-- ============================================================== -->
 	<div id="main-wrapper">
-
-		<!-- ============================================================== -->
-		<!-- Top header  -->
-		<!-- ============================================================== -->
-		<!-- Start Navigation -->
 		<div class="header header-light dark-text">
 			<div class="container">
 				<nav id="navigation" class="navigation navigation-landscape">
@@ -246,17 +234,17 @@
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 						<div class="_blog_wrap">
 							<div class="_blog_thumb mb-2">
-								<a href="{{ route('blogs.show', $blog) }}" class="d-block">
+								<a href="javascript:void(0);" class="d-block">
 									<img src="{{ asset($blog->featured_image) }}" class="img-fluid rounded" alt="{{ $blog->title }}">
 								</a>
 							</div>
 							<div class="_blog_caption">
 								<span class="text-muted">{{ $blog->formatted_date }}</span>
 								<h5 class="bl_title lh-1">
-									<a href="{{ route('blogs.show', $blog) }}">{{ $blog->short_title }}</a>
+									<a href="javascript:void(0);">{{ $blog->short_title }}</a>
 								</h5>
 								<p>{{ $blog->excerpt }}</p>
-								<a href="{{ route('blogs.show', $blog) }}" class="text-dark fs-sm">Continue Reading..</a>
+								<a href="javascript:void(0);" class="text-dark fs-sm">Continue Reading..</a>
 							</div>
 						</div>
 					</div>
@@ -265,101 +253,14 @@
 						<div class="text-center py-5">
 							<h4>No blog posts available</h4>
 							<p class="text-muted">Check back later for updates!</p>
-						</div>
-					</div>
+							</div>
+							</div>
 					@endforelse
 				</div>
 
 			</div>
 		</section>
 		<!-- ======================= Blog Start ============================ -->
-
-		<!-- ======================= Instagram Start ============================ -->
-		<section class="p-0">
-			<div class="container-fluid p-0">
-
-				<div class="row no-gutters">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-						<div class="sec_title position-relative text-center">
-							<h2 class="off_title">Instagram Gallery</h2>
-							<span class="fs-lg ft-bold theme-cl pt-3">@brand_represent_71</span>
-							<h3 class="ft-bold lh-1">From Instagram</h3>
-						</div>
-					</div>
-				</div>
-
-				<div class="row no-gutters">
-
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-1.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-2.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-3.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-7.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-8.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-4.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-5.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="_insta_wrap">
-							<div class="_insta_thumb">
-									<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/i-6.png') }}"
-										class="img-fluid" alt=""></a>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
-		</section>
-		<!-- ======================= Instagram Start ============================ -->
 
 		<!-- ======================= Customer Features ======================== -->
 		<section class="px-0 py-3 br-top">
@@ -427,7 +328,7 @@
 
 						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
 							<div class="footer_widget">
-							<img src="{{ asset('frontend/assets/img/footer-logo.png') }}" class="img-footer small mb-2" alt="">
+							<img src="{{ asset('frontend/assets/img/brand_logo.jpg') }}" class="img-footer small mb-2" alt="">
 
 								<div class="address mt-3">
 									3298 Grant Street Longview, TX<br>United Kingdom 75601
@@ -602,76 +503,9 @@
 											praesentium voluptatum deleniti atque corrupti quos dolores.</p>
 									</div>
 
-									<div class="prt_04 mb-2">
-										<p class="d-flex align-items-center mb-0 text-dark ft-medium">Color:</p>
-										<div class="text-left">
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="white8">
-												<label class="form-option-label rounded-circle" for="white8"><span
-														class="form-option-color rounded-circle blc7"></span></label>
-											</div>
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="blue8">
-												<label class="form-option-label rounded-circle" for="blue8"><span
-														class="form-option-color rounded-circle blc2"></span></label>
-											</div>
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="yellow8">
-												<label class="form-option-label rounded-circle" for="yellow8"><span
-														class="form-option-color rounded-circle blc5"></span></label>
-											</div>
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="pink8">
-												<label class="form-option-label rounded-circle" for="pink8"><span
-														class="form-option-color rounded-circle blc3"></span></label>
-											</div>
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="red">
-												<label class="form-option-label rounded-circle" for="red"><span
-														class="form-option-color rounded-circle blc4"></span></label>
-											</div>
-											<div class="form-check form-option form-check-inline mb-1">
-												<input class="form-check-input" type="radio" name="color8" id="green">
-												<label class="form-option-label rounded-circle" for="green"><span
-														class="form-option-color rounded-circle blc6"></span></label>
-											</div>
-										</div>
-									</div>
+									<div class="prt_04 mb-2" id="quickviewColors"></div>
 
-									<div class="prt_04 mb-4">
-										<p class="d-flex align-items-center mb-0 text-dark ft-medium">Size:</p>
-										<div class="text-left pb-0 pt-2">
-											<div class="form-check size-option form-option form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="28"
-													checked="">
-												<label class="form-option-label" for="28">28</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="30">
-												<label class="form-option-label" for="30">30</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="32">
-												<label class="form-option-label" for="32">32</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="34">
-												<label class="form-option-label" for="34">34</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="36">
-												<label class="form-option-label" for="36">36</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="38">
-												<label class="form-option-label" for="38">38</label>
-											</div>
-											<div class="form-check form-option size-option  form-check-inline mb-2">
-												<input class="form-check-input" type="radio" name="size" id="40">
-												<label class="form-option-label" for="40">40</label>
-											</div>
-										</div>
-									</div>
+									<div class="prt_04 mb-4" id="quickviewSizes"></div>
 
 									<div class="prt_05 mb-4">
 										<div class="form-row row g-3 mb-7">
@@ -1113,6 +947,46 @@
 			// Description
 			const descEl = document.querySelector('#quickview .prt_03 p');
 			if (descEl) descEl.textContent = p.description || '';
+
+			// Variants: colors
+			const colorsWrap = document.getElementById('quickviewColors');
+			if (colorsWrap) {
+				if (p.available_colors && p.available_colors.length) {
+					colorsWrap.innerHTML = `
+						<p class="d-flex align-items-center mb-0 text-dark ft-medium">Color:</p>
+						<div class="text-left">
+							${p.available_colors.map((c, idx) => `
+							<div class="form-check form-option form-check-inline mb-1">
+								<input class="form-check-input" type="radio" name="color" id="color_${idx}" value="${c}">
+								<label class="form-option-label rounded-circle" for="color_${idx}"><span class="form-option-color rounded-circle" style="background:${c};"></span></label>
+							</div>
+							`).join('')}
+						</div>
+					`;
+				} else {
+					colorsWrap.innerHTML = '';
+				}
+			}
+
+			// Variants: sizes
+			const sizesWrap = document.getElementById('quickviewSizes');
+			if (sizesWrap) {
+				if (p.available_sizes && p.available_sizes.length) {
+					sizesWrap.innerHTML = `
+						<p class="d-flex align-items-center mb-0 text-dark ft-medium">Size:</p>
+						<div class="text-left pb-0 pt-2">
+							${p.available_sizes.map((s, idx) => `
+							<div class="form-check form-option size-option form-check-inline mb-2">
+								<input class="form-check-input" type="radio" name="size" id="size_${idx}" value="${s}">
+								<label class="form-option-label" for="size_${idx}">${s}</label>
+							</div>
+							`).join('')}
+						</div>
+					`;
+				} else {
+					sizesWrap.innerHTML = '';
+				}
+			}
 		}
 
 		async function addToCartFromModal() {

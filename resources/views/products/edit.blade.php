@@ -184,6 +184,30 @@
                             @enderror
                         </div>
 
+        <!-- Variants -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Variants</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="available_colors" class="form-label">Available Colors</label>
+                  <input type="text" class="form-control" id="available_colors" name="available_colors" value="{{ old('available_colors', isset($product->available_colors) ? implode(', ', $product->available_colors) : '') }}" placeholder="e.g. Red, Blue, Green">
+                  <div class="form-text">Comma-separated list of colors.</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="available_sizes" class="form-label">Available Sizes</label>
+                  <input type="text" class="form-control" id="available_sizes" name="available_sizes" value="{{ old('available_sizes', isset($product->available_sizes) ? implode(', ', $product->available_sizes) : '') }}" placeholder="e.g. S, M, L, XL">
+                  <div class="form-text">Comma-separated list of sizes.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
                         <!-- New Image Preview Area -->
                         <div id="imagePreview" class="row g-2">
                             <!-- Preview images will be added here -->

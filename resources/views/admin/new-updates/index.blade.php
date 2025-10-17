@@ -17,6 +17,63 @@
         </div>
     </div>
 
+    <!-- Filters and Search -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" action="{{ route('admin.new-updates.index') }}" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="search" class="form-label">Search</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="search"
+                                   name="search"
+                                   value="{{ request('search') }}"
+                                   placeholder="Search by title or author...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">All Status</option>
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Published</option>
+                                <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="author" class="form-label">Author</label>
+                            <select class="form-select" id="author" name="author">
+                                <option value="">All Authors</option>
+                                @foreach(\App\Models\Blog::distinct()->pluck('author') as $blogAuthor)
+                                    <option value="{{ $blogAuthor }}" {{ request('author') == $blogAuthor ? 'selected' : '' }}>
+                                        {{ $blogAuthor }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="sort" class="form-label">Sort By</label>
+                            <select class="form-select" id="sort" name="sort">
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest</option>
+                                <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>Title A-Z</option>
+                                <option value="views" {{ request('sort') == 'views' ? 'selected' : '' }}>Most Viewed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-search me-1"></i>Filter
+                            </button>
+                            <a href="{{ route('admin.new-updates.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Clear
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Statistics Cards -->
     <div class="row mb-4">
         <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12">

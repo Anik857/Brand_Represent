@@ -22,6 +22,8 @@ class Product extends Model
         'category',
         'brand',
         'images',
+        'available_colors',
+        'available_sizes',
         'status',
         'featured',
         'weight',
@@ -32,6 +34,8 @@ class Product extends Model
 
     protected $casts = [
         'images' => 'array',
+        'available_colors' => 'array',
+        'available_sizes' => 'array',
         'featured' => 'boolean',
         'price' => 'decimal:2',
         'compare_price' => 'decimal:2',

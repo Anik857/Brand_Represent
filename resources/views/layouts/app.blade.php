@@ -303,6 +303,7 @@
         opacity: 0;
         transform: translateY(-10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -467,82 +468,83 @@
         width: 200px !important;
       }
 
-    .nav-link span {
-      display: block;
-    }
-
-    .sidebar-brand h4 {
-      font-size: 1.1rem;
-    }
-
-    .nav-link {
-      padding: 1rem 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .nav-link i {
-      width: 24px;
-      margin-right: 1rem;
-    }
-
-    @media (max-width: 576px) {
-      .search-box {
-        display: none;
+      .nav-link span {
+        display: block;
       }
 
-      .content-wrapper {
-        padding: 0 0.5rem 1rem;
+      .sidebar-brand h4 {
+        font-size: 1.1rem;
       }
 
-      .top-navbar {
-        padding: 0.75rem;
+      .nav-link {
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
       }
 
-      .stats-card {
-        padding: 1rem;
+      .nav-link i {
+        width: 24px;
+        margin-right: 1rem;
       }
 
-      .table-responsive {
-        font-size: 0.875rem;
+      @media (max-width: 576px) {
+        .search-box {
+          display: none;
+        }
+
+        .content-wrapper {
+          padding: 0 0.5rem 1rem;
+        }
+
+        .top-navbar {
+          padding: 0.75rem;
+        }
+
+        .stats-card {
+          padding: 1rem;
+        }
+
+        .table-responsive {
+          font-size: 0.875rem;
+        }
+
+        .profile-button {
+          padding: 0.4rem 0.8rem;
+        }
+
+        .profile-name {
+          max-width: 80px;
+          font-size: 0.85rem;
+        }
+
+        .profile-role {
+          font-size: 0.7rem;
+        }
+
+        .profile-dropdown {
+          min-width: 180px;
+        }
       }
 
-      .profile-button {
-        padding: 0.4rem 0.8rem;
-      }
+      @media (max-width: 480px) {
+        .profile-button {
+          padding: 0.3rem 0.6rem;
+          gap: 0.5rem;
+        }
 
-      .profile-name {
-        max-width: 80px;
-        font-size: 0.85rem;
-      }
+        .profile-info {
+          display: none;
+        }
 
-      .profile-role {
-        font-size: 0.7rem;
-      }
+        .profile-button {
+          min-width: 40px;
+          justify-content: center;
+        }
 
-      .profile-dropdown {
-        min-width: 180px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .profile-button {
-        padding: 0.3rem 0.6rem;
-        gap: 0.5rem;
-      }
-
-      .profile-info {
-        display: none;
-      }
-
-      .profile-button {
-        min-width: 40px;
-        justify-content: center;
-      }
-
-      .avatar-circle {
-        width: 36px;
-        height: 36px;
-        font-size: 0.9rem;
+        .avatar-circle {
+          width: 36px;
+          height: 36px;
+          font-size: 0.9rem;
+        }
       }
     }
   </style>
@@ -551,7 +553,7 @@
 <body>
   <!-- Sidebar Overlay -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  
+
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-brand">
@@ -565,28 +567,34 @@
             <span>Dashboard</span>
           </a>
         </li>
-                       <li class="nav-item">
-                           <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
-                               <i class="fas fa-tags"></i>
-                               <span>Categories</span>
-                           </a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                               <i class="fas fa-box"></i>
-                               <span>Products</span>
-                           </a>
-                       </li>
-               <li class="nav-item">
-                 <a class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}" href="{{ route('orders.index') }}">
-                   <i class="fas fa-shopping-cart"></i>
-                   <span>Orders</span>
-                 </a>
-               </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+            <i class="fas fa-tags"></i>
+            <span>Categories</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">
+            <i class="fas fa-box"></i>
+            <span>Products</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}" href="{{ route('orders.index') }}">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Orders</span>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
             <i class="fas fa-users"></i>
             <span>Users</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->routeIs('banners.*') || request()->routeIs('banners.index') ? 'active' : '' }}" href="{{ route('banners.index') }}">
+            <i class="fas fa-images"></i>
+            <span>Banner</span>
           </a>
         </li>
         <li class="nav-item">
@@ -655,13 +663,13 @@
                 <div class="profile-name">{{ Auth::user()->name }}</div>
                 <div class="profile-role">
                   @if(Auth::user()->hasRole('admin'))
-                    Administrator
+                  Administrator
                   @elseif(Auth::user()->hasRole('manager'))
-                    Manager
+                  Manager
                   @elseif(Auth::user()->hasRole('employee'))
-                    Employee
+                  Employee
                   @else
-                    Customer
+                  Customer
                   @endif
                 </div>
               </div>
@@ -740,10 +748,10 @@
 
     // Close sidebar when clicking outside on mobile
     document.addEventListener('click', function(event) {
-      if (window.innerWidth <= 768 && 
-          !sidebar.contains(event.target) && 
-          !sidebarToggle.contains(event.target) &&
-          sidebar.classList.contains('show')) {
+      if (window.innerWidth <= 768 &&
+        !sidebar.contains(event.target) &&
+        !sidebarToggle.contains(event.target) &&
+        sidebar.classList.contains('show')) {
         closeSidebar();
       }
     });

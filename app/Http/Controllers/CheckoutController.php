@@ -25,6 +25,7 @@ class CheckoutController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
+            'phone' => 'required|string|max:20',
             'address' => 'required|string|max:500',
         ]);
 
@@ -44,6 +45,7 @@ class CheckoutController extends Controller
                 'order_number' => 'ORD-' . strtoupper(substr(uniqid(), -8)),
                 'customer_name' => $request->name,
                 'customer_email' => $request->email,
+                'customer_phone' => $request->phone,
                 'shipping_address' => $request->address,
                 'billing_address' => $request->address,
                 'shipping_option' => $request->shipping ?? null,
@@ -84,5 +86,3 @@ class CheckoutController extends Controller
         return redirect('/')->with('success', 'Order placed successfully.');
     }
 }
-
-

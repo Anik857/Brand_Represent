@@ -40,11 +40,11 @@ class OrderItem extends Model
     // Accessors
     public function getFormattedUnitPriceAttribute()
     {
-        return '$' . number_format($this->unit_price, 2);
+        return '৳' . number_format($this->unit_price, 2);
     }
 
     public function getFormattedTotalPriceAttribute()
     {
-        return '$' . number_format($this->total_price, 2);
+        return '৳' . number_format($this->total_price, 2);
     }
 }

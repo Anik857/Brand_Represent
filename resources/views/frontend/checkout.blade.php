@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,27 +13,34 @@
     <style>
         /* Custom styles for a modern look */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fc; /* Light background */
+            background-color: #f7f9fc;
+            /* Light background */
         }
+
         .card {
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .card:hover {
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
-        input[type="radio"]:checked + label {
+
+        input[type="radio"]:checked+label {
             border-color: #4f46e5;
             background-color: #eef2ff;
         }
+
         .input-focus:focus {
             border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
         }
     </style>
 </head>
+
 <body class="min-h-screen antialiased">
     <!-- Main Content Container -->
     <div class="max-w-4xl mx-auto p-4 md:p-8">
@@ -53,7 +61,7 @@
 
             <!-- Section 1: Customer Information (Col 1 & 2) -->
             <div class="lg:col-span-2 space-y-8">
-                
+
                 <!-- Customer Details Card -->
                 <div class="card bg-white p-6 rounded-xl border border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -63,15 +71,15 @@
                     <div class="space-y-4">
                         <label class="block">
                             <span class="text-sm font-medium text-gray-700">Full Name</span>
-                            <input type="text" name="name" id="name" value="{{ old('name', auth()->user()->name ?? '') }}" required class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
+                            <input type="text" placeholder="Entre your Name" name="name" id="name" value="{{ old('name', auth()->user()->name ?? '') }}" required class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
                         </label>
                         <label class="block">
                             <span class="text-sm font-medium text-gray-700">Email</span>
-                            <input type="email" name="email" id="email" value="{{ old('email', auth()->user()->email ?? '') }}" required class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
+                            <input type="email" placeholder="Enter your email" name="email" id="email" value="{{ old('email', auth()->user()->email ?? '') }}" required class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
                         </label>
                         <label class="block">
-                            <span class="text-sm font-medium text-gray-700">Phone Number (e.g., 01XXXXXXXXX)</span>
-                            <input type="tel" id="phone" required pattern="^01[0-9]{9}$" title="Must be a valid Bangladeshi 11-digit mobile number starting with 01" class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
+                            <span class="text-sm font-medium text-gray-700">Phone Number (personal, 01XXXXXXXXX)</span>
+                            <input type="tel" name="phone" id="phone" required pattern="^01[0-9]{9}$" title="Must be a valid Bangladeshi 11-digit mobile number starting with 01" class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
                         </label>
                         <label class="block">
                             <span class="text-sm font-medium text-gray-700">Full Address (House, Road, Area)</span>
@@ -98,7 +106,7 @@
                                 <span class="font-bold text-indigo-600">৳ 80</span>
                             </label>
                         </div>
-                        
+
                         <div class="flex items-center">
                             <input type="radio" id="shippingChittagong" name="shipping" value="Chittagong Within" data-charge="100" required class="hidden" onchange="updateSummary()">
                             <label for="shippingChittagong" class="w-full cursor-pointer p-4 border-2 border-gray-300 rounded-xl flex justify-between items-center transition duration-200 hover:bg-gray-50">
@@ -106,7 +114,7 @@
                                     <span class="font-medium text-gray-800">Chittagong Within</span>
                                     <p class="text-xs text-gray-500">Standard Delivery</p>
                                 </div>
-                                <span class="font-bold text-indigo-600">৳ 100</span>
+                                <span class="font-bold text-indigo-600">৳ 150</span>
                             </label>
                         </div>
 
@@ -138,7 +146,7 @@
                                 <span class="font-medium text-gray-800">Cash on Delivery (COD)</span>
                             </label>
                         </div>
-                        
+
                         <!-- bKash -->
                         <div class="flex items-center">
                             <input type="radio" id="paymentBkash" name="payment" value="bKash" required class="hidden" onchange="togglePaymentFields(this.value)">
@@ -147,7 +155,7 @@
                                 <span class="font-medium text-gray-800">bKash</span>
                             </label>
                         </div>
-                        
+
                         <!-- Nagad -->
                         <div class="flex items-center">
                             <input type="radio" id="paymentNagad" name="payment" value="Nagad" required class="hidden" onchange="togglePaymentFields(this.value)">
@@ -160,12 +168,12 @@
                         <!-- bKash/Nagad Transaction Fields (Conditionally visible) -->
                         <div id="transactionFields" class="bg-gray-50 p-4 rounded-lg space-y-4 hidden mt-4 transition-all duration-300">
                             <p id="paymentAccountInfo" class="text-sm font-semibold text-center text-indigo-600"></p>
-                            
+
                             <label class="block">
                                 <span class="text-sm font-medium text-gray-700">Your Payment Number</span>
                                 <input type="tel" id="paymentNumber" placeholder="Your 11-digit number" class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
                             </label>
-                            
+
                             <label class="block">
                                 <span class="text-sm font-medium text-gray-700">Transaction ID (TrxID)</span>
                                 <input type="text" id="transactionId" placeholder="e.g., 8G7A5F3R4S" class="input-focus mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none transition duration-150">
@@ -199,7 +207,7 @@
                         @endforeach
                     </div>
                     @endif
-                    
+
                     <div class="space-y-3 pb-4 border-b border-gray-200">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-600">Product Cost (Fixed)</span>
@@ -222,7 +230,7 @@
                             Preview & Place Order
                         </button>
                     </div>
-                    
+
                     <p class="text-xs text-gray-400 mt-4 text-center">Your User ID: <span id="userIdDisplay" class="font-mono text-gray-500"></span></p>
 
                     <!-- Message Box for general feedback (e.g., success/error) -->
@@ -269,7 +277,7 @@
     <script>
         window.INIT_SUBTOTAL = parseFloat(document.getElementById('productCost').dataset.amount || '0');
     </script>
-    
+
     <script>
         // Data and Constants
         const PRODUCT_COST = window.INIT_SUBTOTAL || 0;
@@ -278,7 +286,7 @@
             'Chittagong Within': 100,
             'Outside Areas': 150
         };
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize Lucide icons
             lucide.createIcons();
@@ -305,10 +313,10 @@
                 paymentNumberInput.required = true;
                 transactionIdInput.required = true;
 
-                const accountInfo = paymentMethod === 'bKash'
-                    ? `Please send the total amount to our official bKash Merchant Number: **017XXXXXXXX**`
-                    : `Please send the total amount to our official Nagad Merchant Number: **018XXXXXXXX**`;
-                
+                const accountInfo = paymentMethod === 'bKash' ?
+                    `Please send the total amount to our official bKash personal Number: **01675338219**` :
+                    `Please send the total amount to our official Nagad personal Number: **01675338219**`;
+
                 infoText.innerHTML = accountInfo;
 
             } else {
@@ -372,7 +380,7 @@
                 paymentNumber: document.getElementById('paymentNumber').value.trim(),
                 transactionId: document.getElementById('transactionId').value.trim(),
             };
-            
+
             // Additional client-side validation for bKash/Nagad
             if ((paymentMethod === 'bKash' || paymentMethod === 'Nagad')) {
                 if (!data.paymentNumber || data.paymentNumber.length !== 11 || !data.paymentNumber.startsWith('01')) {
@@ -384,13 +392,13 @@
                     return null;
                 }
             }
-            
+
             return data;
         }
 
         /**
          * Handles form submission: validates, displays preview modal.
-         * @param {Event} event 
+         * @param {Event} event
          */
         function handleFormSubmit(event) {
             event.preventDefault();
@@ -407,7 +415,7 @@
         function showModal(data) {
             const modal = document.getElementById('previewModal');
             const content = document.getElementById('modalSummaryContent');
-            
+
             let paymentDetails = '';
             if (data.paymentMethod !== 'Cash on Delivery') {
                 paymentDetails = `
@@ -427,18 +435,18 @@
                     <p class="text-gray-600"><span class="font-semibold text-gray-800">Address:</span> ${data.address}</p>
                     <p class="text-gray-600"><span class="font-semibold text-gray-800">Shipping:</span> ${data.shippingOption} (৳${data.deliveryCharge})</p>
                 </div>
-                
+
                 <div class="border-b py-2">
                     <p class="text-gray-600"><span class="font-semibold text-gray-800">Payment:</span> ${data.paymentMethod}</p>
                     ${paymentDetails}
                 </div>
-                
+
                 <div class="pt-2 text-lg font-bold flex justify-between">
                     <span class="text-gray-800">TOTAL PAYABLE:</span>
                     <span class="text-indigo-600">৳ ${data.totalAmount}</span>
                 </div>
             `;
-            
+
             modal.classList.remove('hidden', 'opacity-0');
             modal.classList.add('flex');
             // Animate scale in
@@ -457,11 +465,17 @@
             const trx = document.getElementById('transactionId');
             // Create hidden inputs if not present
             if (!document.getElementById('paymentNumberInput')) {
-                const i = document.createElement('input'); i.type = 'hidden'; i.name = 'paymentNumber'; i.id = 'paymentNumberInput';
+                const i = document.createElement('input');
+                i.type = 'hidden';
+                i.name = 'paymentNumber';
+                i.id = 'paymentNumberInput';
                 document.getElementById('checkoutForm').appendChild(i);
             }
             if (!document.getElementById('transactionIdInput')) {
-                const i = document.createElement('input'); i.type = 'hidden'; i.name = 'transactionId'; i.id = 'transactionIdInput';
+                const i = document.createElement('input');
+                i.type = 'hidden';
+                i.name = 'transactionId';
+                i.id = 'transactionIdInput';
                 document.getElementById('checkoutForm').appendChild(i);
             }
             document.getElementById('paymentNumberInput').value = num ? num.value.trim() : '';
@@ -510,4 +524,5 @@
         }
     </script>
 </body>
+
 </html>

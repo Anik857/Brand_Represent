@@ -64,21 +64,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = \App\Models\Category::active()->ordered()->get();
-        
-        $brands = [
-            'Apple',
-            'Samsung',
-            'Nike',
-            'Adidas',
-            'Sony',
-            'Microsoft',
-            'Google',
-            'Amazon',
-            'Tesla',
-            'BMW'
-        ];
 
-        return view('products.create', compact('categories', 'brands'));
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -94,7 +81,6 @@ class ProductController extends Controller
             'compare_price' => 'nullable|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
-            'brand' => 'nullable|string',
             'status' => 'required|in:active,inactive,draft',
             'featured' => 'boolean',
             'weight' => 'nullable|numeric|min:0',
@@ -146,20 +132,7 @@ class ProductController extends Controller
     {
         $categories = \App\Models\Category::active()->ordered()->get();
 
-        $brands = [
-            'Apple',
-            'Samsung',
-            'Nike',
-            'Adidas',
-            'Sony',
-            'Microsoft',
-            'Google',
-            'Amazon',
-            'Tesla',
-            'BMW'
-        ];
-
-        return view('products.edit', compact('product', 'categories', 'brands'));
+        return view('products.edit', compact('product', 'categories'));
     }
 
     /**
@@ -175,7 +148,6 @@ class ProductController extends Controller
             'compare_price' => 'nullable|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
-            'brand' => 'nullable|string',
             'status' => 'required|in:active,inactive,draft',
             'featured' => 'boolean',
             'weight' => 'nullable|numeric|min:0',
@@ -204,20 +176,28 @@ class ProductController extends Controller
 
         // Handle removed images
         $currentImages = $product->images ?? [];
+        // Filter out empties and any placeholder entries that might exist from older logic
+        $currentImages = array_values(array_filter($currentImages, function ($img) {
+            if (!is_string($img) || trim($img) === '') {
+                return false;
+            }
+            return !str_contains($img, 'via.placeholder.com');
+        }));
         if ($request->has('removed_images')) {
             $removedImages = $request->removed_images;
             $this->deleteImages($removedImages);
-            $currentImages = array_diff($currentImages, $removedImages);
+            // Remove and reindex so JSON persists as an array
+            $currentImages = array_values(array_diff($currentImages, $removedImages));
         }
 
         // Handle new image uploads
         $uploadedImages = $this->handleImageUploads($request);
         if (!empty($uploadedImages)) {
             // Merge current images with new uploads
-            $data['images'] = array_merge($currentImages, $uploadedImages);
+            $data['images'] = array_values(array_merge($currentImages, $uploadedImages));
         } else {
             // Keep existing images if no new ones provided
-            $data['images'] = $currentImages;
+            $data['images'] = array_values($currentImages);
         }
 
         $product->update($data);
@@ -332,13 +312,7 @@ class ProductController extends Controller
             }
         }
 
-        // If no images uploaded, use placeholder
-        if (empty($uploadedImages)) {
-            $uploadedImages = [
-                'https://via.placeholder.com/300x300/4f46e5/ffffff?text=No+Image'
-            ];
-        }
-
+        // Return only actual uploaded image URLs; do not inject placeholders here
         return $uploadedImages;
     }
 

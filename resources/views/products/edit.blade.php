@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('products.update', $product) }}" enctype="multipart/form-data">
+    <form id="productEditForm" method="POST" action="{{ route('products.update', $product) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row">
@@ -184,30 +184,30 @@
                             @enderror
                         </div>
 
-        <!-- Variants -->
-        <div class="card mb-4">
-          <div class="card-header">
-            <h5 class="mb-0">Variants</h5>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="available_colors" class="form-label">Available Colors</label>
-                  <input type="text" class="form-control" id="available_colors" name="available_colors" value="{{ old('available_colors', isset($product->available_colors) ? implode(', ', $product->available_colors) : '') }}" placeholder="e.g. Red, Blue, Green">
-                  <div class="form-text">Comma-separated list of colors.</div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3">
-                  <label for="available_sizes" class="form-label">Available Sizes</label>
-                  <input type="text" class="form-control" id="available_sizes" name="available_sizes" value="{{ old('available_sizes', isset($product->available_sizes) ? implode(', ', $product->available_sizes) : '') }}" placeholder="e.g. S, M, L, XL">
-                  <div class="form-text">Comma-separated list of sizes.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                        <!-- Variants -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Variants</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="available_colors" class="form-label">Available Colors</label>
+                                            <input type="text" class="form-control" id="available_colors" name="available_colors" value="{{ old('available_colors', isset($product->available_colors) ? implode(', ', $product->available_colors) : '') }}" placeholder="e.g. Red, Blue, Green">
+                                            <div class="form-text">Comma-separated list of colors.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="available_sizes" class="form-label">Available Sizes</label>
+                                            <input type="text" class="form-control" id="available_sizes" name="available_sizes" value="{{ old('available_sizes', isset($product->available_sizes) ? implode(', ', $product->available_sizes) : '') }}" placeholder="e.g. S, M, L, XL">
+                                            <div class="form-text">Comma-separated list of sizes.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- New Image Preview Area -->
                         <div id="imagePreview" class="row g-2">
                             <!-- Preview images will be added here -->
@@ -278,10 +278,10 @@
                     </div>
                 </div>
 
-                <!-- Category & Brand -->
+                <!-- Category -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0">Category & Brand</h5>
+                        <h5 class="mb-0">Category</h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -295,20 +295,6 @@
                                 @endforeach
                             </select>
                             @error('category_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="brand" class="form-label">Brand</label>
-                            <select class="form-select @error('brand') is-invalid @enderror" id="brand" name="brand">
-                                <option value="">Select Brand</option>
-                                @foreach($brands as $brand)
-                                <option value="{{ $brand }}" {{ old('brand', $product->brand) == $brand ? 'selected' : '' }}>
-                                    {{ $brand }}
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('brand')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -461,7 +447,10 @@
             hiddenInput.type = 'hidden';
             hiddenInput.name = 'removed_images[]';
             hiddenInput.value = imageUrl;
-            document.querySelector('form').appendChild(hiddenInput);
+            const formEl = document.getElementById('productEditForm');
+            if (formEl) {
+                formEl.appendChild(hiddenInput);
+            }
         }
     }
 

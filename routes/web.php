@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\NewUpdatesController;
@@ -25,12 +26,12 @@ Route::get('/', function () {
         ->latest()
         ->take(8)
         ->get();
-    
+
     $latestBlogs = \App\Models\Blog::published()
         ->latest()
         ->limit(3)
         ->get();
-    
+
     return view('welcome', compact('trendyProducts', 'latestBlogs'));
 });
 
@@ -58,14 +59,14 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::middleware('auth')->group(function () {
     // Dashboard - requires view dashboard permission
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('permission:view dashboard');
-    
+
     // Profile Routes - accessible to all authenticated users
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-    
+
     // Category routes - with permission middleware
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index')->middleware('permission:view categories');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create')->middleware('permission:create categories');
@@ -137,7 +138,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/{group}', [SettingsController::class, 'update'])->name('settings.update')->middleware('permission:manage users');
     Route::get('/settings/setting/{setting}', [SettingsController::class, 'show'])->name('settings.show')->middleware('permission:manage users');
     Route::delete('/settings/setting/{setting}', [SettingsController::class, 'destroy'])->name('settings.destroy')->middleware('permission:manage users');
-    
+
     // Blog management routes - with permission middleware
     Route::resource('blogs', AdminBlogController::class)->names([
         'index' => 'admin.blogs.index',
@@ -160,8 +161,11 @@ Route::middleware('auth')->group(function () {
         'destroy' => 'admin.new-updates.destroy',
     ])->middleware('permission:manage users');
 
+    // Banner management (auth only)
+    Route::resource('banners', BannerController::class);
+
     // This must be LAST to avoid conflicts - redirect /settings/{group} to /settings/{group}/edit
-    Route::get('/settings/{group}', function($group) {
+    Route::get('/settings/{group}', function ($group) {
         return redirect()->route('settings.edit', $group);
     })->name('settings.group')->middleware('permission:manage users');
 });

@@ -254,10 +254,10 @@
           </div>
         </div>
 
-        <!-- Category & Brand -->
+        <!-- Category -->
         <div class="card mb-4">
           <div class="card-header">
-            <h5 class="mb-0">Category & Brand</h5>
+            <h5 class="mb-0">Category</h5>
           </div>
           <div class="card-body">
             <div class="mb-3">
@@ -271,20 +271,6 @@
                 @endforeach
               </select>
               @error('category_id')
-              <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
-            <div class="mb-3">
-              <label for="brand" class="form-label">Brand</label>
-              <select class="form-select @error('brand') is-invalid @enderror" id="brand" name="brand">
-                <option value="">Select Brand</option>
-                @foreach($brands as $brand)
-                <option value="{{ $brand }}" {{ old('brand') == $brand ? 'selected' : '' }}>
-                  {{ $brand }}
-                </option>
-                @endforeach
-              </select>
-              @error('brand')
               <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>

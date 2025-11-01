@@ -13,9 +13,24 @@
 	<link href="{{ asset('frontend/assets/css/styles.css') }}" rel="stylesheet">
 	<style>
 		/* Center images inside quickview slider */
-		#quickview .quick_view_slide { text-align: center; }
-		#quickview .single_view_slide { display: flex; align-items: center; justify-content: center; min-height: 360px; }
-		#quickview .single_view_slide img { max-width: 100%; max-height: 360px; height: auto; width: auto; margin: 0 auto; }
+		#quickview .quick_view_slide {
+			text-align: center;
+		}
+
+		#quickview .single_view_slide {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 360px;
+		}
+
+		#quickview .single_view_slide img {
+			max-width: 100%;
+			max-height: 360px;
+			height: auto;
+			width: auto;
+			margin: 0 auto;
+		}
 	</style>
 
 </head>
@@ -58,19 +73,8 @@
 						</div>
 					</div>
 					<div class="nav-menus-wrapper" style="transition-property: none;">
-						<!-- <ul class="nav-menu">
 
-							<li><a href="#">Home</a></li>
-
-							<li><a href="javascript:void(0);">Shop</a></li>
-
-							<li><a href="javascript:void(0);">Product</a></li>
-
-							<li><a href="javascript:void(0);">Pages</a></li>
-
-						</ul> -->
-
-						<ul class="nav-menu nav-menu-social align-to-right">
+						<ul class="nav-menu nav-menu-social align-to-right align-items-center justify-content-center">
 							<li>
 								<a href="#" onclick="openSearch()">
 									<i class="lni lni-search-alt"></i>
@@ -82,13 +86,13 @@
 								</a>
 							</li>
 							<li>
-								<a href="#" onclick="openWishlist()">
-									<i class="lni lni-heart"></i><span class="dn-counter">2</span>
+								<a href="#" >
+									<i class="lni lni-heart"></i><span class="dn-counter">0</span>
 								</a>
 							</li>
 							<li>
 								<a href="#" onclick="openCart()">
-									<i class="lni lni-shopping-basket"></i><span class="dn-counter theme-bg">3</span>
+									<i class="lni lni-shopping-basket"></i><span class="dn-counter theme-bg">0</span>
 								</a>
 							</li>
 						</ul>
@@ -109,11 +113,11 @@
 
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 						<a href="#" class="card card-overflow card-scale no-radius mb-0">
-						<div class="bg-image" style="background:url('{{ asset('frontend/assets/img/a-1.png') }}')no-repeat;" data-overlay="2">
+							<div class="bg-image" data-bg="{{ optional(\App\Models\Banner::where('key','home_banner_1')->where('is_active', true)->first())->image_url ?? asset('frontend/assets/img/banner_1.jpg') }}" data-overlay="2">
 							</div>
 							<div class="ct_body">
 								<div class="ct_body_caption">
-									<h1 class="mb-0 ft-bold text-light">Mens</h1>
+									<h1 class="mb-0 ft-bold text-light"></h1>
 								</div>
 							</div>
 						</a>
@@ -121,11 +125,11 @@
 
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 						<a href="#" class="card card-overflow card-scale no-radius mb-0">
-						<div class="bg-image" style="background:url('{{ asset('frontend/assets/img/a-2.png') }}')no-repeat;" data-overlay="2">
+							<div class="bg-image" data-bg="{{ optional(\App\Models\Banner::where('key','home_banner_2')->where('is_active', true)->first())->image_url ?? asset('frontend/assets/img/banner_2.jpg') }}" data-overlay="2">
 							</div>
 							<div class="ct_body">
 								<div class="ct_body_caption">
-									<h1 class="mb-0 ft-bold text-light">Kids</h1>
+									<h1 class="mb-0 ft-bold text-light"></h1>
 								</div>
 							</div>
 						</a>
@@ -133,11 +137,11 @@
 
 					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 						<a href="#" class="card card-overflow card-scale no-radius mb-0">
-						<div class="bg-image" style="background:url('{{ asset('frontend/assets/img/a-3.png') }}') no-repeat;" data-overlay="2">
+							<div class="bg-image" data-bg="{{ optional(\App\Models\Banner::where('key','home_banner_3')->where('is_active', true)->first())->image_url ?? asset('frontend/assets/img/banner_3.jpg') }}" data-overlay="2">
 							</div>
 							<div class="ct_body">
 								<div class="ct_body_caption">
-									<h1 class="mb-0 ft-bold text-light">Womens</h1>
+									<h1 class="mb-0 ft-bold text-light"></h1>
 								</div>
 							</div>
 						</a>
@@ -146,6 +150,19 @@
 				</div>
 			</div>
 		</section>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				document.querySelectorAll('.bg-image[data-bg]').forEach(function(el) {
+					var src = el.getAttribute('data-bg');
+					if (src) {
+						el.style.backgroundImage = 'url(' + src + ')';
+						el.style.backgroundRepeat = 'no-repeat';
+						el.style.backgroundSize = 'cover';
+						el.style.backgroundPosition = 'center';
+					}
+				});
+			});
+		</script>
 		<!-- ======================= Category Style 1 ======================== -->
 
 		<!-- ======================= Product List ======================== -->
@@ -166,49 +183,49 @@
 					@forelse($trendyProducts as $product)
 					<div class="col-xl-3 col-lg-4 col-md-6 col-6">
 						<div class="product_grid card b-0">
-								@php
-									$badge = null;
-									if (($product->quantity ?? 0) <= 0) {
-										$badge = ['bg-sold', 'Sold Out'];
-									} elseif ($product->compare_price && $product->compare_price > $product->price) {
-										$badge = ['bg-sale', 'Sale'];
-									} elseif ($product->featured) {
-										$badge = ['bg-hot', 'Hot'];
-									}
+							@php
+							$badge = null;
+							if (($product->quantity ?? 0) <= 0) {
+								$badge=['bg-sold', 'Sold Out' ];
+								} elseif ($product->compare_price && $product->compare_price > $product->price) {
+								$badge = ['bg-sale', 'Sale'];
+								} elseif ($product->featured) {
+								$badge = ['bg-hot', 'Hot'];
+								}
 								@endphp
 								@if($badge)
-									<div class="badge {{ $badge[0] }} text-white position-absolute ft-regular ab-left text-upper">{{ $badge[1] }}</div>
+								<div class="badge {{ $badge[0] }} text-white position-absolute ft-regular ab-left text-upper">{{ $badge[1] }}</div>
 								@endif
 								<button class="btn btn_love position-absolute ab-right snackbar-wishlist"><i class="far fa-heart"></i></button>
-							<div class="card-body p-0">
-								<div class="shop_thumb position-relative">
+								<div class="card-body p-0">
+									<div class="shop_thumb position-relative">
 										<a class="card-img-top d-block overflow-hidden" href="#" data-product-id="{{ $product->id }}" onclick="openQuickView(event, {{ $product->id }})">
 											<img class="card-img-top" src="{{ $product->main_image }}" alt="{{ $product->name }}">
 										</a>
 										<div class="product-hover-overlay bg-dark d-flex align-items-center justify-content-center">
 											<div class="edlio"><a href="#" class="text-white fs-sm ft-medium" onclick="openQuickView(event, {{ $product->id }})"><i class="fas fa-eye me-1"></i>Quick View</a></div>
-									</div>
-								</div>
-							</div>
-								<div class="card-footers b-0 pt-3 px-2 bg-white d-flex align-items-start justify-content-center">
-								<div class="text-left">
-									<div class="text-center">
-											<h5 class="fw-normal fs-md mb-0 lh-1 mb-1"><a href="#">{{ $product->name }}</a></h5>
-											<div class="elis_rty">
-												@if($product->compare_price && $product->compare_price > $product->price)
-													<span class="text-muted ft-medium line-through me-2">${{ number_format($product->compare_price, 2) }}</span>
-												@endif
-												<span class="fw-medium fs-md text-dark">${{ number_format($product->price, 2) }}</span>
 										</div>
 									</div>
 								</div>
-							</div>
+								<div class="card-footers b-0 pt-3 px-2 bg-white d-flex align-items-start justify-content-center">
+									<div class="text-left">
+										<div class="text-center">
+											<h5 class="fw-normal fs-md mb-0 lh-1 mb-1"><a href="#">{{ $product->name }}</a></h5>
+											<div class="elis_rty">
+												@if($product->compare_price && $product->compare_price > $product->price)
+												<span class="text-muted ft-medium line-through me-2">৳{{ number_format($product->compare_price, 2) }}</span>
+												@endif
+												<span class="fw-medium fs-md text-dark">৳{{ number_format($product->price, 2) }}</span>
+											</div>
+										</div>
+									</div>
+								</div>
 						</div>
 					</div>
 					@empty
-						<div class="col-12">
-							<p class="text-center text-muted">No trendy products available.</p>
-									</div>
+					<div class="col-12">
+						<p class="text-center text-muted">No trendy products available.</p>
+					</div>
 					@endforelse
 				</div>
 				<!-- row -->
@@ -253,8 +270,8 @@
 						<div class="text-center py-5">
 							<h4>No blog posts available</h4>
 							<p class="text-muted">Check back later for updates!</p>
-							</div>
-							</div>
+						</div>
+					</div>
 					@endforelse
 				</div>
 
@@ -274,7 +291,7 @@
 							</div>
 							<div class="d_capt">
 								<h5 class="mb-0">Free Shipping</h5>
-								<span class="text-muted">Capped at $10 per order</span>
+								<span class="text-muted">Capped at ৳10 per order</span>
 							</div>
 						</div>
 					</div>
@@ -328,13 +345,13 @@
 
 						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
 							<div class="footer_widget">
-							<img src="{{ asset('frontend/assets/img/brand_logo.jpg') }}" class="img-footer small mb-2" alt="">
+								<img src="{{ asset('frontend/assets/img/brand_logo.jpg') }}" class="img-footer small mb-2" alt="">
 
 								<div class="address mt-3">
-									3298 Grant Street Longview, TX<br>United Kingdom 75601
+									Pulsar fashion,(1st outlet)Nagar plaza,<br>fulbaria,1st floor,shop no: 85.
 								</div>
 								<div class="address mt-3">
-									1-202-555-0106<br>help@shopper.com
+									01675338219<br>brandrepresent.com
 								</div>
 								<div class="address mt-3">
 									<ul class="list-inline">
@@ -491,8 +508,8 @@
 												<span class="small">(412 Reviews)</span>
 											</div>
 											<div class="elis_rty"><span
-													class="ft-medium text-muted line-through fs-md me-2">$199</span><span
-													class="ft-bold theme-cl fs-lg me-2">$110</span><span
+													class="ft-medium text-muted line-through fs-md me-2">৳199</span><span
+													class="ft-bold theme-cl fs-lg me-2">৳110</span><span
 													class="ft-regular text-danger bg-light-danger py-1 px-2 fs-sm">Out
 													of Stock</span></div>
 										</div>
@@ -517,6 +534,8 @@
 													<option value="3">3</option>
 													<option value="4">4</option>
 													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
 												</select>
 											</div>
 											<div class="col-12 col-md-12 col-lg-6">
@@ -533,6 +552,15 @@
 													<i class="lni lni-heart me-2"></i>Wishlist
 												</button>
 											</div>
+										</div>
+									</div>
+
+									<div class="prt_06 mb-3">
+										<div class="mb-3">
+											<button type="button" class="btn btn-success d-flex align-items-center" onclick="openWhatsApp()">
+												<i class="fab fa-whatsapp me-2"></i>
+												<span>Wholesale for WhatsApp</span>
+											</button>
 										</div>
 									</div>
 
@@ -658,7 +686,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/tshirt.png') }}"
+										<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/tshirt.png') }}"
 												class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
@@ -672,7 +700,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/pant.png') }}"
+										<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/pant.png') }}"
 												class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
@@ -686,7 +714,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/fashion.png') }}"
+										<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/fashion.png') }}"
 												class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
@@ -700,7 +728,7 @@
 								<div class="sl_cat_01">
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
-												<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/sneakers.png') }}"
+										<a href="javascript:void(0);" class="d-block"><img src="{{ asset('frontend/assets/img/sneakers.png') }}"
 												class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
@@ -715,7 +743,7 @@
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
 										<a href="javascript:void(0);" class="d-block"><img
-														src="{{ asset('frontend/assets/img/television.png') }}" class="img-fluid" width="40" alt=""></a>
+												src="{{ asset('frontend/assets/img/television.png') }}" class="img-fluid" width="40" alt=""></a>
 									</div>
 								</div>
 								<div class="sl_cat_02">
@@ -729,7 +757,7 @@
 									<div
 										class="d-inline-flex align-items-center justify-content-center p-3 circle mb-2 gray">
 										<a href="javascript:void(0);" class="d-block"><img
-														src="{{ asset('frontend/assets/img/accessories.png') }}" class="img-fluid" width="40"
+												src="{{ asset('frontend/assets/img/accessories.png') }}" class="img-fluid" width="40"
 												alt=""></a>
 									</div>
 								</div>
@@ -758,14 +786,14 @@
 						<div class="d-flex align-items-center justify-content-between br-bottom px-3 py-3">
 							<div class="cart_single d-flex align-items-center">
 								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/4.jpg') }}" width="60" class="img-fluid"
+									<a href="#"><img src="{{ asset('frontend/assets/img/product/4.jpg') }}" width="60" class="img-fluid"
 											alt=""></a>
 								</div>
 								<div class="cart_single_caption ps-2">
 									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Women Striped Shirt Dress</h4>
 									<p class="mb-2"><span class="text-dark ft-medium small">36</span>, <span
 											class="text-dark small">Red</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$129</h4>
+									<h4 class="fs-md ft-medium mb-0 lh-1">৳129</h4>
 								</div>
 							</div>
 							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
@@ -776,14 +804,14 @@
 						<div class="d-flex align-items-center justify-content-between br-bottom px-3 py-3">
 							<div class="cart_single d-flex align-items-center">
 								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/7.jpg') }}" width="60" class="img-fluid"
+									<a href="#"><img src="{{ asset('frontend/assets/img/product/7.jpg') }}" width="60" class="img-fluid"
 											alt=""></a>
 								</div>
 								<div class="cart_single_caption ps-2">
 									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Girls Floral Print Jumpsuit</h4>
 									<p class="mb-2"><span class="text-dark ft-medium small">36</span>, <span
 											class="text-dark small">Red</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$129</h4>
+									<h4 class="fs-md ft-medium mb-0 lh-1">৳129</h4>
 								</div>
 							</div>
 							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
@@ -794,14 +822,14 @@
 						<div class="d-flex align-items-center justify-content-between px-3 py-3">
 							<div class="cart_single d-flex align-items-center">
 								<div class="cart_selected_single_thumb">
-												<a href="#"><img src="{{ asset('frontend/assets/img/product/8.jpg') }}" width="60" class="img-fluid"
+									<a href="#"><img src="{{ asset('frontend/assets/img/product/8.jpg') }}" width="60" class="img-fluid"
 											alt=""></a>
 								</div>
 								<div class="cart_single_caption ps-2">
 									<h4 class="product_title fs-sm ft-medium mb-0 lh-1">Girls Solid A-Line Dress</h4>
 									<p class="mb-2"><span class="text-dark ft-medium small">30</span>, <span
 											class="text-dark small">Blue</span></p>
-									<h4 class="fs-md ft-medium mb-0 lh-1">$100</h4>
+									<h4 class="fs-md ft-medium mb-0 lh-1">৳100</h4>
 								</div>
 							</div>
 							<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button>
@@ -812,7 +840,7 @@
 
 					<div class="d-flex align-items-center justify-content-between br-top br-bottom px-3 py-3">
 						<h6 class="mb-0">Subtotal</h6>
-						<h3 class="mb-0 ft-medium" id="wishlistSubtotal">$0.00</h3>
+						<h3 class="mb-0 ft-medium" id="wishlistSubtotal">৳0.00</h3>
 					</div>
 
 					<div class="cart_action px-3 py-3">
@@ -842,7 +870,7 @@
 
 					<div class="d-flex align-items-center justify-content-between br-top br-bottom px-3 py-3">
 						<h6 class="mb-0">Subtotal</h6>
-						<h3 class="mb-0 ft-medium" id="cartSubtotal">$0.00</h3>
+						<h3 class="mb-0 ft-medium" id="cartSubtotal">৳0.00</h3>
 					</div>
 
 					<div class="cart_action px-3 py-3">
@@ -901,7 +929,7 @@
 		function populateQuickView(p) {
 			// Images
 			const slides = (p.images && p.images.length ? p.images : [p.main_image])
-				.map(url => `<div class="single_view_slide"><img src="${url}" class="img-fluid" alt=""></div>`) 
+				.map(url => `<div class="single_view_slide"><img src="${url}" class="img-fluid" alt=""></div>`)
 				.join('');
 			const slideWrap = document.querySelector('#quickview .quick_view_slide');
 			if (slideWrap) slideWrap.innerHTML = slides;
@@ -938,9 +966,9 @@
 			if (priceWrap) {
 				let html = '';
 				if (p.compare_price && p.compare_price > p.price) {
-					html += `<span class="ft-medium text-muted line-through fs-md me-2">$${Number(p.compare_price).toFixed(2)}</span>`;
+					html += `<span class="ft-medium text-muted line-through fs-md me-2">৳${Number(p.compare_price).toFixed(2)}</span>`;
 				}
-				html += `<span class="ft-bold theme-cl fs-lg me-2">$${Number(p.price).toFixed(2)}</span>`;
+				html += `<span class="ft-bold theme-cl fs-lg me-2">৳${Number(p.price).toFixed(2)}</span>`;
 				priceWrap.innerHTML = html;
 			}
 
@@ -990,43 +1018,56 @@
 		}
 
 		async function addToCartFromModal() {
- 			const modal = document.getElementById('quickview');
- 			const productId = modal.dataset.productId;
- 			const qtySelect = modal.querySelector('.prt_05 select');
- 			const quantity = qtySelect ? parseInt(qtySelect.value || '1') : 1;
+			const modal = document.getElementById('quickview');
+			const productId = modal.dataset.productId;
+			const qtySelect = modal.querySelector('.prt_05 select');
+			const quantity = qtySelect ? parseInt(qtySelect.value || '1') : 1;
 			// Collect optional color/size from radio inputs if present
 			const colorInput = modal.querySelector('input[name^="color"]:checked');
 			const sizeInput = modal.querySelector('input[name="size"]:checked');
-			const color = colorInput ? colorInput.id : null;
-			const size = sizeInput ? sizeInput.id : null;
- 			try {
- 				const resp = await fetch(`{{ route('cart.add') }}`, {
- 					method: 'POST',
- 					headers: {
- 						'Content-Type': 'application/json',
- 						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
- 					},
- 					body: JSON.stringify({ product_id: productId, quantity, color, size })
- 				});
- 				if (!resp.ok) throw new Error('Add to cart failed');
- 				const data = await resp.json();
- 				updateCartCounter(data.count);
- 				if (window.Snackbar) {
- 					Snackbar.show({text: 'Added to cart', pos: 'bottom-center'});
- 				}
- 			} catch (e) {
- 				console.error(e);
- 			}
- 		}
+			const color = colorInput ? colorInput.value : null;
+			const size = sizeInput ? sizeInput.value : null;
+			try {
+				const resp = await fetch(`{{ route('cart.add') }}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+					},
+					body: JSON.stringify({
+						product_id: productId,
+						quantity,
+						color,
+						size
+					})
+				});
+				if (!resp.ok) throw new Error('Add to cart failed');
+				const data = await resp.json();
+				updateCartCounter(data.count);
+				if (window.Snackbar) {
+					Snackbar.show({
+						text: 'Added to cart',
+						pos: 'bottom-center'
+					});
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		}
 
 		function updateCartCounter(count) {
 			// header counters
 			const counters = document.querySelectorAll('.lni-shopping-basket ~ .dn-counter, .lni-shopping-basket + span.dn-counter, .lni.lni-shopping-basket ~ span.dn-counter');
-			counters.forEach(el => { el.textContent = count; el.classList.add('theme-bg'); });
+			counters.forEach(el => {
+				el.textContent = count;
+				el.classList.add('theme-bg');
+			});
 		}
+
 		function openWishlist() {
 			document.getElementById("Wishlist").style.display = "block";
 		}
+
 		function closeWishlist() {
 			document.getElementById("Wishlist").style.display = "none";
 		}
@@ -1038,10 +1079,13 @@
 			try {
 				const resp = await fetch(`{{ route('cart.items') }}`);
 				if (!resp.ok) throw new Error('Failed to load cart');
-				const { items, subtotal } = await resp.json();
+				const {
+					items,
+					subtotal
+				} = await resp.json();
 				renderCartItems(items);
 				const subtotalEl = document.getElementById('cartSubtotal');
-				if (subtotalEl) subtotalEl.textContent = `$${Number(subtotal).toFixed(2)}`;
+				if (subtotalEl) subtotalEl.textContent = `৳${Number(subtotal).toFixed(2)}`;
 			} catch (e) {
 				console.error(e);
 			}
@@ -1063,13 +1107,14 @@
 						<div class="cart_single_caption ps-2">
 							<h4 class="product_title fs-sm ft-medium mb-0 lh-1">${it.name}</h4>
 							<p class="mb-2"><span class="text-dark small">Qty: ${it.quantity}</span></p>
-							<h4 class="fs-md ft-medium mb-0 lh-1">$${(it.price * it.quantity).toFixed(2)}</h4>
+							<h4 class="fs-md ft-medium mb-0 lh-1">৳${(it.price * it.quantity).toFixed(2)}</h4>
 						</div>
 					</div>
 					<div class="fls_last"><button class="close_slide gray"><i class="ti-close"></i></button></div>
 				</div>
 			`).join('');
 		}
+
 		function closeCart() {
 			document.getElementById("Cart").style.display = "none";
 		}
@@ -1079,8 +1124,14 @@
 		function openSearch() {
 			document.getElementById("Search").style.display = "block";
 		}
+
 		function closeSearch() {
 			document.getElementById("Search").style.display = "none";
+		}
+
+		function openWhatsApp() {
+			const whatsappUrl = "https://wa.link/oe6ovh";
+			window.open(whatsappUrl, '_blank');
 		}
 	</script>
 
